@@ -1,4 +1,4 @@
-# 魔术方法
+print("---------------------------魔术方法---------------------------")
 
 import collections
 from math import hypot
@@ -92,4 +92,6 @@ __invert__ ~、__lshift__ <<、__rshift__ >>、__and__ &、__or__ |、__xor__ ^
 __rlshift__、__rrshift__、__rand__、__rxor__、__ror__
 增量赋值位运算符 
 __ilshift__、__irshift__、__iand__、__ixor__、__ior__
+继承顺序
+__mro__
 """
