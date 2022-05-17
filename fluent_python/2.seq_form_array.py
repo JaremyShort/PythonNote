@@ -18,7 +18,6 @@ import numpy
 import bisect
 import random as r
 from array import array
-from random import random
 from collections import namedtuple, deque
 
 # region tuple使用
@@ -68,7 +67,6 @@ print(delhi)
 print(delhi._asdict())
 
 # endregion
-
 
 # region 切片
 
@@ -191,7 +189,6 @@ for i in range(SIZE):
 
 # endregion
 
-
 # region 数组
 
 # print("------------------------------数组------------------------------")
@@ -212,7 +209,6 @@ for i in range(SIZE):
 # print(floats2 == floats)
 
 # endregion
-
 
 # region 内存试图(memoryview)
 
