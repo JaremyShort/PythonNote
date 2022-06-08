@@ -97,5 +97,119 @@ async def func():
 
 
 asyncio.run(func())
+# endregion
+
+
+# region Future
+print("----------------------------Future----------------------------")
+
+
+# 需要手动设置结果 ★★★
+
+async def set_after(fut):
+    await asyncio.sleep(2)
+    fut.set_result("666")
+
+
+async def func5():
+    # 获取当前正在运行的事件循环
+    loop = asyncio.get_running_loop()  # 不存在loop会报错，区别于asyncio.get_event_loop
+
+    # 创建一个任务（Future对象），没绑定任何行为，则这个任务永远不知道什么时候结束。
+    fut = loop.create_future()
+
+    # 创建一个任务（Task对象），绑定了set_after函数，函数内部在2s之后，会给fut赋值。
+    await  loop.create_task(set_after(fut))
+
+    # loop.run_in_executor() # 包装普通函数为协程函数
+
+    data = await fut
+    print(data)
+
+
+asyncio.run(func5())
+
+print("----------------------------异步迭代器----------------------------")
+
+
+class Reader(object):
+
+    def __init__(self):
+        self.count = 0
+
+    async def readline(self):
+        self.count += 1
+        if self.count == 100:
+            return None
+        return self.count
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        val = await self.readline()
+        if val == None:
+            raise StopAsyncIteration
+        return val
+
+
+async def func6():
+    obj = Reader()
+    async for item in obj:
+        print(item)
+
+
+asyncio.run(func6())
+
+print("----------------------------异步上下文管理器----------------------------")
+
+
+class AsyncContextManager:
+
+    def __init__(self):
+        pass
+
+    async def do_something(self):
+        # 异步操作数据库
+        return 666
+
+    async def __aenter__(self):
+        # 异步连接数据库
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        # 异步关闭数据库链接
+        await asyncio.sleep(1)
+
+
+async def func7():
+    async with AsyncContextManager() as f:
+        result = await f.do_something()
+        print(result)
+
+
+asyncio.run(func7())
+
+print("----------------------------uvloop----------------------------")
+# 是asyncio的事件循环的替代方案   性能比asyncio高   ★暂不支持windows  -> uvicorn
+# import uvloop
+# asyncio.set_event_loop_policy(uvloop.EventLoopPolicy)
+
+
+print("----------------------------异步redis----------------------------")
+import aioredis
+
+
+async def execute(address, password):
+    redis = await aioredis.create_redis(address, password)
+    await redis.hmset_dict('car', key1=1, key2=2, key3=3)
+    result = await redis.hgetall('car', encoding='utf-8')
+    print(result)
+    redis.close()
+
+    await redis.wait_closed()
+
+
+asyncio.run(execute('', ''))
 
 # endregion

@@ -161,6 +161,8 @@ class StrKeyDict(UserDict):
 
 print("-------------------------------------不可变映射类型------------------------------------")
 
+# MappingProxyType 可以用来创建不可变映射
+# 对象
 d = {1: 'A'}
 d_proxy = MappingProxyType(d)
 print(d_proxy)
@@ -202,6 +204,7 @@ print(hash(1.0))
 # 在散列表里查找表元（具体取几位，得看当前散列表的大小）。若找到的表元是空的，则抛出 KeyError 异常。若不是空的，则表元里会有一对 found_key:found_value。
 # 这时候 Python 会检验 search_key == found_key 是否为真，如果它们相等的话，就会返回 found_value。
 # 如果 search_key 和 found_key 不匹配的话，这种情况称为散列冲突。
+# ★★★ 不要对字典同时进行迭代和修改 ★★★
 
 
 print("----------------------------------------结束----------------------------------------")
